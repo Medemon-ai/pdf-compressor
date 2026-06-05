@@ -3,66 +3,680 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>PDF Compressor</title>
-
-  <!-- Fonts: Outfit (EN) + Noto Sans JP (JA) -->
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Noto+Sans+JP:wght@300;400;500;700&display=swap" rel="stylesheet" />
-
-  <!-- PDF.js + pdf-lib CDN -->
+  <title>PDF Compressor — Precision Tool</title>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
 
-<style>
-/* ════════════════════════════════════════════════
-   RESET & TOKENS
-════════════════════════════════════════════════ */
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  <style>
+    :root {
+      --bg:       #0a0a0b;
+      --surface:  #111113;
+      --border:   #242428;
+      --accent:   #e8ff47;
+      --accent2:  #47ffd1;
+      --muted:    #5a5a65;
+      --text:     #e2e2e8;
+      --danger:   #ff5f5f;
+    }
 
-:root {
-  --bg:          #f5f3ef;
-  --card:        #ffffff;
-  --card2:       #faf9f7;
-  --border:      #e8e4de;
-  --border2:     #d4cfc6;
-  --text:        #1a1814;
-  --muted:       #8c8780;
-  --accent:      #d4522a;
-  --accent-soft: rgba(212, 82, 42, 0.10);
-  --accent-mid:  rgba(212, 82, 42, 0.22);
-  --green:       #2a8c5a;
-  --green-soft:  rgba(42, 140, 90, 0.10);
-  --shadow-sm:   0 2px 8px rgba(26,24,20,0.06);
-  --shadow-md:   0 8px 32px rgba(26,24,20,0.10);
-  --shadow-lg:   0 20px 60px rgba(26,24,20,0.12);
-  --radius:      16px;
-  --radius-sm:   10px;
-  --font-en:     'Outfit', sans-serif;
-  --font-ja:     'Noto Sans JP', sans-serif;
-  --font:        var(--font-en);
-  --transition:  0.22s cubic-bezier(0.4, 0, 0.2, 1);
-}
+    * { box-sizing: border-box; margin: 0; padding: 0; }
 
-html.lang-ja { --font: var(--font-ja); }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Syne', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      overflow-x: hidden;
+    }
 
-html { font-size: 16px; }
-body {
-  font-family: var(--font);
-  background: var(--bg);
-  color: var(--text);
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 0 16px 80px;
-  -webkit-font-smoothing: antialiased;
-  position: relative;
-  overflow-x: hidden;
-}
+    /* ─── GRID BACKGROUND ─── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(232,255,71,0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(232,255,71,0.03) 1px, transparent 1px);
+      background-size: 48px 48px;
+      pointer-events: none;
+      z-index: 0;
+    }
 
-/* ─── BACKGROUND PATTERN ─── */
-body::before {
+    /* ─── NOISE TEXTURE ─── */
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.5;
+    }
+
+    .wrapper {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      max-width: 680px;
+      padding: 48px 24px 80px;
+    }
+
+    /* ─── HEADER ─── */
+    header {
+      margin-bottom: 56px;
+    }
+    .label-tag {
+      font-family: 'Space Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 0.2em;
+      color: var(--accent);
+      background: rgba(232,255,71,0.08);
+      border: 1px solid rgba(232,255,71,0.2);
+      padding: 4px 10px;
+      display: inline-block;
+      margin-bottom: 16px;
+    }
+    h1 {
+      font-size: clamp(36px, 8vw, 56px);
+      font-weight: 800;
+      line-height: 1;
+      letter-spacing: -0.03em;
+      color: var(--text);
+    }
+    h1 span { color: var(--accent); }
+    .subtitle {
+      margin-top: 12px;
+      font-family: 'Space Mono', monospace;
+      font-size: 12px;
+      color: var(--muted);
+      letter-spacing: 0.05em;
+    }
+
+    /* ─── DROP ZONE ─── */
+    .drop-zone {
+      border: 1.5px dashed var(--border);
+      background: var(--surface);
+      padding: 48px 32px;
+      text-align: center;
+      cursor: pointer;
+      position: relative;
+      transition: border-color 0.2s, background 0.2s;
+      clip-path: polygon(0 0, calc(100% - 16px) 0, 100% 16px, 100% 100%, 16px 100%, 0 calc(100% - 16px));
+    }
+    .drop-zone:hover, .drop-zone.dragover {
+      border-color: var(--accent);
+      background: rgba(232,255,71,0.04);
+    }
+    .drop-zone input[type="file"] {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      cursor: pointer;
+      width: 100%;
+      height: 100%;
+    }
+    .drop-icon {
+      width: 48px;
+      height: 48px;
+      margin: 0 auto 20px;
+      opacity: 0.4;
+    }
+    .drop-zone p {
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--text);
+    }
+    .drop-zone small {
+      font-family: 'Space Mono', monospace;
+      font-size: 11px;
+      color: var(--muted);
+      display: block;
+      margin-top: 6px;
+      letter-spacing: 0.05em;
+    }
+
+    /* ─── CORNER ACCENTS ─── */
+    .drop-zone::before, .drop-zone::after {
+      content: '';
+      position: absolute;
+      width: 12px;
+      height: 12px;
+      border-color: var(--accent);
+      border-style: solid;
+      opacity: 0;
+      transition: opacity 0.2s;
+    }
+    .drop-zone:hover::before, .drop-zone.dragover::before {
+      top: 8px; left: 8px;
+      border-width: 2px 0 0 2px;
+      opacity: 1;
+    }
+    .drop-zone:hover::after, .drop-zone.dragover::after {
+      bottom: 8px; right: 8px;
+      border-width: 0 2px 2px 0;
+      opacity: 1;
+    }
+
+    /* ─── FILE INFO CARD ─── */
+    .file-card {
+      margin-top: 24px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      padding: 20px 24px;
+      display: none;
+      align-items: center;
+      gap: 16px;
+      position: relative;
+    }
+    .file-card.visible { display: flex; }
+    .file-card .file-icon {
+      width: 36px;
+      height: 44px;
+      background: rgba(232,255,71,0.1);
+      border: 1px solid rgba(232,255,71,0.25);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      clip-path: polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 0 100%);
+    }
+    .file-card .file-icon svg { width: 18px; height: 18px; color: var(--accent); }
+    .file-card .file-info { flex: 1; overflow: hidden; }
+    .file-card .file-name {
+      font-size: 13px;
+      font-weight: 700;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      color: var(--text);
+    }
+    .file-card .file-size {
+      font-family: 'Space Mono', monospace;
+      font-size: 11px;
+      color: var(--muted);
+      margin-top: 3px;
+    }
+    .remove-btn {
+      background: none;
+      border: none;
+      color: var(--muted);
+      cursor: pointer;
+      padding: 4px;
+      transition: color 0.2s;
+    }
+    .remove-btn:hover { color: var(--danger); }
+
+    /* ─── QUALITY SLIDER ─── */
+    .controls {
+      margin-top: 28px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      padding: 24px;
+      display: none;
+    }
+    .controls.visible { display: block; }
+
+    .control-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 14px;
+    }
+    .control-label {
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--text);
+    }
+    .quality-badge {
+      font-family: 'Space Mono', monospace;
+      font-size: 12px;
+      color: var(--accent);
+      background: rgba(232,255,71,0.1);
+      padding: 2px 8px;
+      border: 1px solid rgba(232,255,71,0.2);
+    }
+
+    .slider-wrap {
+      position: relative;
+      padding-bottom: 24px;
+    }
+    input[type="range"] {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 100%;
+      height: 2px;
+      background: var(--border);
+      outline: none;
+      cursor: pointer;
+    }
+    input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 18px;
+      height: 18px;
+      background: var(--accent);
+      cursor: pointer;
+      border-radius: 0;
+      clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+      transition: transform 0.15s;
+    }
+    input[type="range"]::-webkit-slider-thumb:hover {
+      transform: scale(1.2);
+    }
+
+    .slider-ticks {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 8px;
+    }
+    .slider-ticks span {
+      font-family: 'Space Mono', monospace;
+      font-size: 9px;
+      color: var(--muted);
+      letter-spacing: 0.05em;
+    }
+
+    .preset-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      margin-top: 16px;
+    }
+    .preset-btn {
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--muted);
+      font-family: 'Space Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 0.08em;
+      padding: 8px 6px;
+      cursor: pointer;
+      text-transform: uppercase;
+      transition: all 0.15s;
+      text-align: center;
+    }
+    .preset-btn:hover, .preset-btn.active {
+      border-color: var(--accent);
+      color: var(--accent);
+      background: rgba(232,255,71,0.06);
+    }
+
+    /* ─── COMPRESS BUTTON ─── */
+    .compress-btn {
+      margin-top: 24px;
+      width: 100%;
+      background: var(--accent);
+      color: #0a0a0b;
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: 15px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      padding: 18px;
+      border: none;
+      cursor: pointer;
+      clip-path: polygon(0 0, calc(100% - 12px) 0, 100% 12px, 100% 100%, 12px 100%, 0 calc(100% - 12px));
+      transition: opacity 0.2s, transform 0.15s;
+      display: none;
+    }
+    .compress-btn.visible { display: block; }
+    .compress-btn:hover:not(:disabled) {
+      opacity: 0.88;
+      transform: translateY(-1px);
+    }
+    .compress-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    /* ─── PROGRESS ─── */
+    .progress-section {
+      margin-top: 24px;
+      display: none;
+    }
+    .progress-section.visible { display: block; }
+
+    .progress-header {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 8px;
+      font-family: 'Space Mono', monospace;
+      font-size: 11px;
+      color: var(--muted);
+    }
+    #progress-label { color: var(--accent); }
+
+    .progress-bar-track {
+      width: 100%;
+      height: 3px;
+      background: var(--border);
+      overflow: hidden;
+    }
+    .progress-bar-fill {
+      height: 100%;
+      background: var(--accent);
+      width: 0%;
+      transition: width 0.3s ease;
+      position: relative;
+    }
+    .progress-bar-fill::after {
+      content: '';
+      position: absolute;
+      right: 0;
+      top: -4px;
+      bottom: -4px;
+      width: 3px;
+      background: var(--accent);
+      box-shadow: 0 0 10px var(--accent);
+    }
+
+    .log-lines {
+      margin-top: 12px;
+      font-family: 'Space Mono', monospace;
+      font-size: 10px;
+      color: var(--muted);
+      letter-spacing: 0.03em;
+      min-height: 48px;
+    }
+    .log-lines .log-line {
+      padding: 2px 0;
+      opacity: 0;
+      animation: fadeInLog 0.3s forwards;
+    }
+    .log-lines .log-line.accent { color: var(--accent2); }
+    @keyframes fadeInLog {
+      from { opacity: 0; transform: translateY(4px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ─── RESULT CARD ─── */
+    .result-card {
+      margin-top: 28px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      padding: 28px 24px;
+      display: none;
+      position: relative;
+      overflow: hidden;
+    }
+    .result-card.visible { display: block; }
+    .result-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--accent), var(--accent2));
+    }
+
+    .result-stats {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 1px;
+      background: var(--border);
+      margin-bottom: 24px;
+    }
+    .stat-box {
+      background: var(--surface);
+      padding: 16px 12px;
+      text-align: center;
+    }
+    .stat-value {
+      font-size: 22px;
+      font-weight: 800;
+      color: var(--text);
+      letter-spacing: -0.02em;
+    }
+    .stat-value.accent { color: var(--accent); }
+    .stat-label {
+      font-family: 'Space Mono', monospace;
+      font-size: 9px;
+      color: var(--muted);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-top: 4px;
+    }
+
+    .download-btn {
+      width: 100%;
+      background: transparent;
+      border: 1.5px solid var(--accent);
+      color: var(--accent);
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: 14px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      padding: 16px;
+      cursor: pointer;
+      clip-path: polygon(0 0, calc(100% - 12px) 0, 100% 12px, 100% 100%, 12px 100%, 0 calc(100% - 12px));
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+    .download-btn:hover {
+      background: rgba(232,255,71,0.08);
+      box-shadow: 0 0 24px rgba(232,255,71,0.12);
+    }
+    .download-btn svg { width: 16px; height: 16px; }
+
+    /* ─── ERROR BANNER ─── */
+    .error-banner {
+      margin-top: 16px;
+      background: rgba(255,95,95,0.08);
+      border: 1px solid rgba(255,95,95,0.3);
+      color: var(--danger);
+      font-family: 'Space Mono', monospace;
+      font-size: 11px;
+      padding: 12px 16px;
+      display: none;
+      letter-spacing: 0.03em;
+    }
+    .error-banner.visible { display: block; }
+
+    /* ─── FOOTER ─── */
+    footer {
+      margin-top: 64px;
+      font-family: 'Space Mono', monospace;
+      font-size: 10px;
+      color: var(--muted);
+      letter-spacing: 0.08em;
+      text-align: center;
+    }
+
+    /* ─── ANIMATE IN ─── */
+    .wrapper > * {
+      animation: slideUp 0.5s cubic-bezier(0.16,1,0.3,1) both;
+    }
+    .wrapper > *:nth-child(2) { animation-delay: 0.05s; }
+    .wrapper > *:nth-child(3) { animation-delay: 0.1s; }
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Pulse animation for processing */
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.5; }
+    }
+    .pulsing { animation: pulse 1.5s ease-in-out infinite; }
+  </style>
+</head>
+<body>
+
+<div class="wrapper">
+
+  <!-- HEADER -->
+  <header>
+    <div class="label-tag">MICRO-TOOL v1.0 // CLIENT-SIDE</div>
+    <h1>PDF<span>.</span>COMPRESS</h1>
+    <p class="subtitle">// ZERO UPLOAD · ZERO SERVER · 100% BROWSER</p>
+  </header>
+
+  <!-- DROP ZONE -->
+  <div class="drop-zone" id="dropZone">
+    <input type="file" id="fileInput" accept=".pdf" />
+    <svg class="drop-icon" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect x="4" y="4" width="32" height="40" rx="0" stroke="currentColor" stroke-width="2"/>
+      <path d="M28 4L36 12" stroke="currentColor" stroke-width="2"/>
+      <path d="M28 4v8h8" fill="none" stroke="currentColor" stroke-width="2"/>
+      <path d="M12 28h16M20 22v12" stroke="currentColor" stroke-width="2" stroke-linecap="square"/>
+    </svg>
+    <p>Drop your PDF here, or click to browse</p>
+    <small>SUPPORTS PDF · ANY SIZE · FULLY PRIVATE</small>
+  </div>
+
+  <!-- FILE CARD -->
+  <div class="file-card" id="fileCard">
+    <div class="file-icon">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square">
+        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+        <polyline points="14 2 14 8 20 8"/>
+      </svg>
+    </div>
+    <div class="file-info">
+      <div class="file-name" id="fileName">document.pdf</div>
+      <div class="file-size" id="fileSize">0 KB</div>
+    </div>
+    <button class="remove-btn" id="removeBtn" title="Remove file">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square">
+        <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+      </svg>
+    </button>
+  </div>
+
+  <!-- CONTROLS -->
+  <div class="controls" id="controls">
+    <div class="control-row">
+      <span class="control-label">Image Quality</span>
+      <span class="quality-badge" id="qualityBadge">MEDIUM — 72 DPI</span>
+    </div>
+    <div class="slider-wrap">
+      <input type="range" id="qualitySlider" min="0" max="2" step="1" value="1" />
+      <div class="slider-ticks">
+        <span>MAX COMPRESS</span>
+        <span>BALANCED</span>
+        <span>HIGH QUALITY</span>
+      </div>
+    </div>
+
+    <div class="preset-row">
+      <button class="preset-btn" data-val="0">
+        🗜 AGGRESSIVE<br>
+        <span style="font-size:9px; opacity:0.6;">Smallest file</span>
+      </button>
+      <button class="preset-btn active" data-val="1">
+        ⚖ BALANCED<br>
+        <span style="font-size:9px; opacity:0.6;">Best tradeoff</span>
+      </button>
+      <button class="preset-btn" data-val="2">
+        ✦ QUALITY<br>
+        <span style="font-size:9px; opacity:0.6;">Clear images</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- COMPRESS BUTTON -->
+  <button class="compress-btn" id="compressBtn">
+    ⚡ COMPRESS PDF
+  </button>
+
+  <!-- PROGRESS -->
+  <div class="progress-section" id="progressSection">
+    <div class="progress-header">
+      <span id="progress-label">INITIALIZING...</span>
+      <span id="progress-pct">0%</span>
+    </div>
+    <div class="progress-bar-track">
+      <div class="progress-bar-fill" id="progressFill"></div>
+    </div>
+    <div class="log-lines" id="logLines"></div>
+  </div>
+
+  <!-- ERROR -->
+  <div class="error-banner" id="errorBanner"></div>
+
+  <!-- RESULT CARD -->
+  <div class="result-card" id="resultCard">
+    <div class="result-stats">
+      <div class="stat-box">
+        <div class="stat-value" id="statOriginal">—</div>
+        <div class="stat-label">Original</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-value accent" id="statCompressed">—</div>
+        <div class="stat-label">Compressed</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-value accent" id="statSaved">—</div>
+        <div class="stat-label">Size Saved</div>
+      </div>
+    </div>
+
+    <button class="download-btn" id="downloadBtn">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square">
+        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+        <polyline points="7 10 12 15 17 10"/>
+        <line x1="12" y1="15" x2="12" y2="3"/>
+      </svg>
+      DOWNLOAD COMPRESSED PDF
+    </button>
+  </div>
+
+  <footer>// YOUR FILE NEVER LEAVES YOUR DEVICE · BUILT WITH PDF-LIB + PDF.JS</footer>
+</div>
+
+<script>
+  // ─── PDFS.JS WORKER ───
+  pdfjsLib.GlobalWorkerOptions.workerSrc =
+    'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+
+  // ─── STATE ───
+  let selectedFile = null;
+  let compressedBlob = null;
+
+  // Quality config: [imageScale, jpegQuality, label]
+  const QUALITY_CONFIGS = [
+    { scale: 0.8, jpeg: 0.45, dpi: 52,  label: 'AGGRESSIVE — 52 DPI' },
+    { scale: 1.0, jpeg: 0.65, dpi: 72,  label: 'MEDIUM — 72 DPI' },
+    { scale: 1.5, jpeg: 0.82, dpi: 108, label: 'HIGH — 108 DPI' },
+  ];
+
+  // ─── ELEMENTS ───
+  const dropZone     = document.getElementById('dropZone');
+  const fileInput    = document.getElementById('fileInput');
+  const fileCard     = document.getElementById('fileCard');
+  const fileName     = document.getElementById('fileName');
+  const fileSizeEl   = document.getElementById('fileSize');
+  const removeBtn    = document.getElementById('removeBtn');
+  const controls     = document.getElementById('controls');
+  const qualitySlider= document.getElementById('qualitySlider');
+  const qualityBadge = document.getElementById('qualityBadge');
+  const compressBtn  = document.getElementById('compressBtn');
+  const progressSection = document.getElementById('progressSection');
+  const progressFill = document.getElementById('progressFill');
+  const progressLabel= document.getElementById('progress-label');
+  const progressPct  = document.getElementById('progress-pct');
+  const logLines     = document.getElementById('logLines');
+  const errorBanner  = document.getElementById('errorBanner');
+  const resultCard   = document.getElementById('resultCard');
+  const statOriginal = document.getElementById('statOriginal');
+  const statCompressed = document.getElementById('statCompressed');
+  const statSaved    = document.getElementById('statSaved');
+  const downloadBtn  = document.getElementById('downloadBtn');
+
+  // ─── DRAG & DROP ───
+  dropZone.addEventListener('dragover', e => { e.preventDefault(); dropZone.classList.add('dragover'); });
+  dropZone.addEventListener('dragleave', body::before {
   content: '';
   position: fixed;
   inset: 0;
