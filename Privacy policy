@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>プライバシーポリシー (Privacy Policy) — EasyPDFCompress</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Noto+Sans+JP:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    :root { --bg: #0a0a0b; --surface: #111113; --border: #242428; --accent: #e8ff47; --text: #e2e2e8; }
+    body { background: var(--bg); color: var(--text); font-family: 'Noto Sans JP', sans-serif; min-height: 100vh; overflow-x: hidden; }
+    body::before { content: ''; position: fixed; inset: 0; background-image: linear-gradient(rgba(232,255,71,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(232,255,71,0.03) 1px, transparent 1px); background-size: 48px 48px; pointer-events: none; z-index: 0; }
+    .wrapper { position: relative; z-index: 1; width: 100%; max-width: 680px; margin: 0 auto; padding: 48px 24px 80px; }
+    .clip-sharp { clip-path: polygon(0 0, calc(100% - 12px) 0, 100% 12px, 100% 100%, 12px 100%, 0 calc(100% - 12px)); }
+  </style>
+</head>
+<body>
+<div class="wrapper">
+  <header class="mb-12">
+    <div class="inline-block font-mono text-[10px] tracking-widest text-[var(--accent)] bg-[rgba(232,255,71,0.08)] border border-[rgba(232,255,71,0.2)] px-2.5 py-1 mb-4">PRIVACY POLICY // 個人情報保護方針</div>
+    <h1 class="text-3xl font-bold text-white tracking-tight">プライバシーポリシー</h1>
+    <p class="font-mono text-xs text-[#5a5a65] mt-2">// クッキーポリシーおよび広告配信について</p>
+  </header>
+  <main class="space-y-6 text-xs leading-relaxed text-[#e2e2e8]">
+    <section class="bg-[var(--surface)] border border-[var(--border)] p-6 clip-sharp">
+      <h2 class="text-[var(--accent)] text-sm font-bold tracking-wider mb-2">1. ファイルデータの取り扱い</h2>
+      <p>当サイトはブラウザ完結型のツールです。ユーザーが選択したPDFファイルはすべてローカル環境で処理され、外部サーバーにアップロードされることはありません。そのため、ファイル内のデータや個人情報を取得・蓄積することはありません。</p>
+    </section>
+    <section class="bg-[var(--surface)] border border-[var(--border)] p-6 clip-sharp">
+      <h2 class="text-[var(--accent)] text-sm font-bold tracking-wider mb-2">2. 広告の配信について（Google AdSense）</h2>
+      <p>当サイトでは、第三者配信の広告サービス「Googleアドセンス」を利用しています。広告配信事業者は、ユーザーの興味に応じた広告を表示するためにCookie（クッキー）を使用することがあります。これによってユーザーのブラウザが特定されますが、個人を特定できるものではありません。Cookieを無効にする設定は、お使いのブラウザの設定をご確認ください。</p>
+    </section>
+    <section class="bg-[var(--surface)] border border-[var(--border)] p-6 clip-sharp">
+      <h2 class="text-[var(--accent)] text-sm font-bold tracking-wider mb-2">3. アクセス解析ツールについて</h2>
+      <p>当サイトでは、トラフィックデータの収集のためにCookieを使用しています。このデータは匿名で収集されており、個人を特定するものではありません。この機能はCookieを無効にすることで収集を拒否することが出来ます。</p>
+    </section>
+    <section class="bg-[var(--surface)] border border-[var(--border)] p-6 clip-sharp">
+      <h2 class="text-[var(--accent)] text-sm font-bold tracking-wider mb-2">4. お問い合わせ先</h2>
+      <p>プライバシーポリシーに関するご質問は、<span class="text-[var(--accent)]">lordabhi737@gmail.com</span> までご連絡ください。</p>
+    </section>
+  </main>
+  <footer class="mt-16 text-center">
+    <a href="/" class="inline-block text-xs font-mono text-[var(--accent)] border border-[var(--accent)] px-4 py-2 hover:bg-[rgba(232,255,71,0.08)] transition-all clip-sharp">← HOME RETURNING</a>
+  </footer>
+</div>
+</body>
+</html>
