@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>利用規約 (Terms of Service) — EasyPDFCompress</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Noto+Sans+JP:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    :root { --bg: #0a0a0b; --surface: #111113; --border: #242428; --accent: #e8ff47; --text: #e2e2e8; }
+    body { background: var(--bg); color: var(--text); font-family: 'Noto Sans JP', sans-serif; min-height: 100vh; overflow-x: hidden; }
+    body::before { content: ''; position: fixed; inset: 0; background-image: linear-gradient(rgba(232,255,71,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(232,255,71,0.03) 1px, transparent 1px); background-size: 48px 48px; pointer-events: none; z-index: 0; }
+    .wrapper { position: relative; z-index: 1; width: 100%; max-width: 680px; margin: 0 auto; padding: 48px 24px 80px; }
+    .clip-sharp { clip-path: polygon(0 0, calc(100% - 12px) 0, 100% 12px, 100% 100%, 12px 100%, 0 calc(100% - 12px)); }
+  </style>
+</head>
+<body>
+<div class="wrapper">
+  <header class="mb-12">
+    <div class="inline-block font-mono text-[10px] tracking-widest text-[var(--accent)] bg-[rgba(232,255,71,0.08)] border border-[rgba(232,255,71,0.2)] px-2.5 py-1 mb-4">TERMS OF SERVICE // 利用規約</div>
+    <h1 class="text-3xl font-bold text-white tracking-tight">利用規約</h1>
+    <p class="font-mono text-xs text-[#5a5a65] mt-2">// 当サイトのご利用規約</p>
+  </header>
+  <main class="space-y-6 text-xs leading-relaxed text-[#e2e2e8]">
+    <section class="bg-[var(--surface)] border border-[var(--border)] p-6 clip-sharp">
+      <h2 class="text-[var(--accent)] text-sm font-bold tracking-wider mb-2">1. 利用規約への同意</h2>
+      <p>ユーザーは、EasyPDFCompress（以下、「当サイト」）を利用することにより、本利用規約に同意したものとみなされます。</p>
+    </section>
+    <section class="bg-[var(--surface)] border border-[var(--border)] p-6 clip-sharp">
+      <h2 class="text-[var(--accent)] text-sm font-bold tracking-wider mb-2">2. サービスの提供と禁止事項</h2>
+      <p>当サイトは無料でPDF圧縮サービスを提供しています。不正なアクセス、システムの破壊、またはサイトの運営を妨害する行為を禁止します。</p>
+    </section>
+    <section class="bg-[var(--surface)] border border-[var(--border)] p-6 clip-sharp">
+      <h2 class="text-[var(--accent)] text-sm font-bold tracking-wider mb-2">3. 免責事項 (Disclaimer)</h2>
+      <p>当サイトの利用によって生じた一切の間接的・直接的損害（データ消失、バグ、その他の不利益）について、当サイトの運営者は一切の責任を負いません。すべてユーザー自身の自己責任においてご利用ください。</p>
+    </section>
+    <section class="bg-[var(--surface)] border border-[var(--border)] p-6 clip-sharp">
+      <h2 class="text-[var(--accent)] text-sm font-bold tracking-wider mb-2">4. 規約の変更</h2>
+      <p>当サイトは、必要に応じていつでも本規約を変更できるものとします。</p>
+    </section>
+  </main>
+  <footer class="mt-16 text-center">
+    <a href="/" class="inline-block text-xs font-mono text-[var(--accent)] border border-[var(--accent)] px-4 py-2 hover:bg-[rgba(232,255,71,0.08)] transition-all clip-sharp">← HOME RETURNING</a>
+  </footer>
+</div>
+</body>
+</html>
