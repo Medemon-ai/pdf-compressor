@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>お問い合わせ (Contact Us) — EasyPDFCompress</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Noto+Sans+JP:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    :root { --bg: #0a0a0b; --surface: #111113; --border: #242428; --accent: #e8ff47; --text: #e2e2e8; }
+    body { background: var(--bg); color: var(--text); font-family: 'Noto Sans JP', sans-serif; min-height: 100vh; overflow-x: hidden; }
+    body::before { content: ''; position: fixed; inset: 0; background-image: linear-gradient(rgba(232,255,71,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(232,255,71,0.03) 1px, transparent 1px); background-size: 48px 48px; pointer-events: none; z-index: 0; }
+    .wrapper { position: relative; z-index: 1; width: 100%; max-width: 680px; margin: 0 auto; padding: 48px 24px 80px; }
+    .clip-sharp { clip-path: polygon(0 0, calc(100% - 12px) 0, 100% 12px, 100% 100%, 12px 100%, 0 calc(100% - 12px)); }
+  </style>
+</head>
+<body>
+<div class="wrapper">
+  <header class="mb-12">
+    <div class="inline-block font-mono text-[10px] tracking-widest text-[var(--accent)] bg-[rgba(232,255,71,0.08)] border border-[rgba(232,255,71,0.2)] px-2.5 py-1 mb-4">CONTACT // お問い合わせ</div>
+    <h1 class="text-3xl font-bold text-white tracking-tight">お問い合わせ</h1>
+    <p class="font-mono text-xs text-[#5a5a65] mt-2">// ご意見・ご要望・バグ報告はこちらまで</p>
+  </header>
+  <main class="space-y-6">
+    <section class="bg-[var(--surface)] border border-[var(--border)] p-6 clip-sharp">
+      <p class="text-xs leading-relaxed text-[#e2e2e8] mb-4">
+        EasyPDFCompressをご利用いただきありがとうございます。当サイトの機能に関するご質問、バグの報告、機能改善のご提案は、以下のメールアドレスまで直接ご連絡ください。
+      </p>
+      <div class="bg-[#0a0a0b] border border-[var(--border)] p-4 text-center font-mono clip-sharp">
+        <span class="text-[10px] text-[#5a5a65] block mb-1">EMAIL ADDRESS</span>
+        <a href="mailto:lordabhi737@gmail.com" class="text-sm md:text-base text-[var(--accent)] font-bold hover:underline">lordabhi737@gmail.com</a>
+      </div>
+    </section>
+    <section class="p-4 border-l-2 border-[#47ffd1] bg-[rgba(71,255,209,0.02)] text-[11px] text-[#5a5a65] leading-relaxed">
+      ※ 通常、お問い合わせをいただいてから3営業日以内にご返信いたします。内容によってはお返事を差し上げられない場合もございますので予めご了承ください。
+    </section>
+  </main>
+  <footer class="mt-16 text-center">
+    <a href="/" class="inline-block text-xs font-mono text-[var(--accent)] border border-[var(--accent)] px-4 py-2 hover:bg-[rgba(232,255,71,0.08)] transition-all clip-sharp">← HOME RETURNING</a>
+  </footer>
+</div>
+</body>
+</html>
