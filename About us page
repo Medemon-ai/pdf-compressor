@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>当サイトについて (About Us) — EasyPDFCompress</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Noto+Sans+JP:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    :root { --bg: #0a0a0b; --surface: #111113; --border: #242428; --accent: #e8ff47; --text: #e2e2e8; }
+    body { background: var(--bg); color: var(--text); font-family: 'Noto Sans JP', sans-serif; min-height: 100vh; overflow-x: hidden; }
+    body::before { content: ''; position: fixed; inset: 0; background-image: linear-gradient(rgba(232,255,71,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(232,255,71,0.03) 1px, transparent 1px); background-size: 48px 48px; pointer-events: none; z-index: 0; }
+    .wrapper { position: relative; z-index: 1; width: 100%; max-width: 680px; margin: 0 auto; padding: 48px 24px 80px; }
+    .clip-sharp { clip-path: polygon(0 0, calc(100% - 12px) 0, 100% 12px, 100% 100%, 12px 100%, 0 calc(100% - 12px)); }
+  </style>
+</head>
+<body>
+<div class="wrapper">
+  <header class="mb-12">
+    <div class="inline-block font-mono text-[10px] tracking-widest text-[var(--accent)] bg-[rgba(232,255,71,0.08)] border border-[rgba(232,255,71,0.2)] px-2.5 py-1 mb-4">ABOUT US // 運営概要</div>
+    <h1 class="text-3xl font-bold text-white tracking-tight">当サイトについて</h1>
+    <p class="font-mono text-xs text-[#5a5a65] mt-2">// EasyPDFCompress のミッションと安全性</p>
+  </header>
+  <main class="space-y-8">
+    <section class="bg-[var(--surface)] border border-[var(--border)] p-6 clip-sharp">
+      <h2 class="text-[var(--accent)] text-sm font-bold tracking-wider mb-3">■ EasyPDFCompress とは？</h2>
+      <p class="text-xs leading-relaxed text-[#e2e2e8]">
+        EasyPDFCompressは、インストール不要で誰でも簡単にPDFファイルの容量を削減できる無料のオンラインツールです。画質を最大限に維持しながら、ブラウザ上で素早く軽量化を行います。
+      </p>
+    </section>
+    <section class="bg-[var(--surface)] border border-[var(--border)] p-6 clip-sharp">
+      <h2 class="text-[var(--accent)] text-sm font-bold tracking-wider mb-3">■ 圧倒的なプライバシー保護（ブラウザ完結型）</h2>
+      <p class="text-xs leading-relaxed text-[#e2e2e8]">
+        一般的なオンラインツールとは異なり、当サイトではアップロードされたファイルが外部サーバーに送信されることはありません。すべての圧縮処理はユーザーのブラウザ上（ローカル環境）で完結するため、機密文書や個人情報が含まれるPDFでも、情報漏洩のリスクなく安全にご利用いただけます。
+      </p>
+    </section>
+    <section class="bg-[var(--surface)] border border-[var(--border)] p-6 clip-sharp">
+      <h2 class="text-[var(--accent)] text-sm font-bold tracking-wider mb-3">■ 運営者情報 (Operator Information)</h2>
+      <table class="w-full text-xs text-left mt-2 border-collapse">
+        <tr class="border-b border-[var(--border)]">
+          <td class="py-3 text-[#5a5a65] font-mono w-1/3">運営者 / 組織</td>
+          <td class="py-3 text-white">EasyPDFCompress Team</td>
+        </tr>
+        <tr class="border-b border-[var(--border)]">
+          <td class="py-3 text-[#5a5a65] font-mono">ウェブサイト</td>
+          <td class="py-3 text-[var(--accent)]"><a href="/">https://easypdfcompress.com</a></td>
+        </tr>
+        <tr>
+          <td class="py-3 text-[#5a5a65] font-mono">主なサービス</td>
+          <td class="py-3 text-white">クライアントサイドでの無料PDF圧縮ツールの提供</td>
+        </tr>
+      </table>
+    </section>
+  </main>
+  <footer class="mt-16 text-center">
+    <a href="/" class="inline-block text-xs font-mono text-[var(--accent)] border border-[var(--accent)] px-4 py-2 hover:bg-[rgba(232,255,71,0.08)] transition-all clip-sharp">← HOME RETURNING</a>
+  </footer>
+</div>
+</body>
+</html>
